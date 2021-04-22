@@ -1,6 +1,7 @@
 package com.example.healthapp
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -9,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_exercise.*
 class ExerciseActivity: AppCompatActivity() {
+    private lateinit var player: MediaPlayer
+    private lateinit var start: MediaPlayer
     private var restTimer: CountDownTimer?= null
     private var restProgress = 0
     private var exerciseno=0
@@ -17,6 +20,10 @@ class ExerciseActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
         setSupportActionBar(toolbar_exercise_activity)
+        player = MediaPlayer.create(applicationContext, R.raw.press_start)
+        player!!.isLooping = false
+        start = MediaPlayer.create(applicationContext, R.raw.beep)
+        start!!.isLooping = false
         val actionbar = supportActionBar
         if(actionbar != null){
             actionbar.setDisplayHomeAsUpEnabled(true)
@@ -45,6 +52,7 @@ class ExerciseActivity: AppCompatActivity() {
             }
 
             override fun onFinish() {
+                start!!.start()
                 exerciseno++
                 Toast.makeText(this@ExerciseActivity, "Start Exercising!",Toast.LENGTH_SHORT).show()
                 task.text="Exercise $exerciseno"
@@ -107,6 +115,7 @@ class ExerciseActivity: AppCompatActivity() {
             }
 
             override fun onFinish() {
+                player!!.start()
                 exercise.setImageResource(R.drawable.health)
                 task.text=" Get Ready For! "
                 status.text="10"
